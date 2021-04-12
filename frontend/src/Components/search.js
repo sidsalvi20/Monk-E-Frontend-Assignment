@@ -1,11 +1,20 @@
-import React, { useContext } from "react";
-
+import React, { useContext,useRef } from "react";
+import './search.css';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import image1 from "../../src/1.png";
-import image2 from "../../src/2.png";
-import image3 from "../../src/3.png";
-import image4 from "../../src/4.png";
-import image5 from "../../src/5.png";
+import cat1 from "../../src/Images/cat1.jpg";
+import cat2 from "../../src/Images/cat2.jpg";
+import cat3 from "../../src/Images/cat3.jpg";
+import cat4 from "../../src/Images/cat4.jpg";
+import dog2 from "../../src/Images/dog2.jpg";
+import dog3 from "../../src/Images/dog3.jpg";
+import dog4 from "../../src/Images/dog4.jpg";
+import dog5 from "../../src/Images/dog5.jpg";
+import dog6 from "../../src/Images/dog6.jpg";
+
+import dog1 from "../../src/Images/dog1.webp";
+import { Slide,Fade } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css'
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -21,6 +30,7 @@ import petContext from "../Context/pet-context";
 import { useHistory } from "react-router-dom";
 
 import axios from "axios";
+import { ListItemText } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -44,7 +54,10 @@ const useStyles = makeStyles((theme) => ({
 export default function PetSearch() {
 	const classes = useStyles();
 	const theme = useTheme();
-
+	const slideRef1 = useRef();
+	const slideRef2 = useRef();
+	const slideRef3 = useRef();
+	
 	
 	const {pets, addPet,editPet, deletePet} = useContext(petContext);
 	const [searchTerm, setSearchTerm] = React.useState("");
@@ -55,8 +68,42 @@ export default function PetSearch() {
 
 	const [searchResults, setSearchResults] = React.useState([]);
 
+	const style = {
+		textAlign: "center",
+		'backgroundImage': `url(${dog4})`,
+		backgroundRepeat: "no-repeat",
+		padding: "200px 0",
+		fontSize: "30px"
+	  };
+	
+	  const properties = {
+		autoplay: false,
+		arrows: true,
+		prevArrow:<div></div>
+	  };
+	
+	  
+	
+	  const back = () => {
+		slideRef1.current.goBack();
+	  }
+	
+	  const next1 = () => {
+		slideRef1.current.goNext();
+	  }
 
+	  const next2 = () => {
+		slideRef2.current.goNext();
+	  }
 
+	  const next3 = () => {
+		slideRef3.current.goNext();
+	  }
+	
+	  const goto = ({ target }) => {
+		slideRef1.current.goTo(parseInt(target.value, 10));
+	  }
+	
 	const handleChange1 = (event) => {
 		setSearchTerm(event.target.value);
 	};
@@ -112,7 +159,12 @@ export default function PetSearch() {
 		"#fcb290",
 	];
 
-	var image_arr = [image1, image2, image3, image4, image5];
+	var dog_arr = [dog1,dog2,dog3,dog4,dog5,dog6];
+
+	var cat_arr = [cat1,cat2,cat3,cat4];
+
+	var func_arr = [next1,next2,next3];
+	var ref_arr = [slideRef1,slideRef2,slideRef3];
 
 	
 
@@ -150,73 +202,135 @@ export default function PetSearch() {
 				<Grid className="icons" item xs={3}></Grid>
 			</Grid>
 			<br />
-			<Grid container spacing={2}>
+			<Grid container spacing={4}>
 				{pets && pets.filter((sub) =>
 			sub.name.toLowerCase().includes(searchTerm.toLowerCase())
 		).map((item,key) => {
+			
 					return (
-						<Grid item xs={4}>
-							<Paper
-								elevation={3}
-								style={{
-									height: "300px",
-									borderRadius: "10px",
-									paddingTop: "10px",
-									paddingBottom: "10px",
-								}}
-							>
-								<div
-									style={{
-										height: "60%",
-										backgroundColor: color_arr[item.name.length % 10],
-										borderRadius: "10px",
-										paddingLeft: "10px",
-										paddingRight: "10px",
-									}}
-								>
-									<Grid container spacing={2}>
-										<Grid item xs={8}>
-											<h1 style={{ color: "white" }}>
-												{item.name.toUpperCase()}
-											</h1>
+						<Grid item xs = {6}>
+						<Paper style = {{background:"#efd7fa",width:"32vw"}} elevation = {3} 
+				
+						>
+					<Fade {...properties}>
+			  {item.species === "dog" ? 
+			  <div  style={{
+				textAlign: "center",
+				'backgroundImage': `url(${dog_arr[item.name.length % 6]})`,
+				backgroundRepeat: "no-repeat",
+				padding: "200px 0",
+				fontSize: "30px"
+			}} >
+			  <h1 className = "heading">{item.name}</h1>
+			  
+			</div>
+			  : 
+			  <div style={{
+				textAlign: "center",
+				'backgroundImage': `url(${cat_arr[item.name.length % 4]})`,
+				backgroundRepeat: "no-repeat",
+				padding: "200px 0",
+				fontSize: "30px"
+			}} >
+			  <h1 className = "heading">{item.name}</h1>
+			  
+			</div>
+			  }			
+			  
+			  <div  >
+			  <div
+										style={
+											item.species === 'dog'? 
+											{
+												height: "60%",
+												
+												'backgroundImage': `url(${dog_arr[item.name.length % 6]})`,
+												
+												borderRadius: "10px",
+												paddingLeft: "10px",
+												paddingRight: "10px",
+											}
+											: 
+											{
+											height: "60%",
+											
+											'backgroundImage': `url(${cat_arr[item.name.length % 4]})`,
+											borderRadius: "10px",
+											paddingLeft: "10px",
+											paddingRight: "10px",
+										}}
+									>
+										<Grid container spacing={2}>
+											<Grid item xs={8}>
+												<h1 className = "card-head" style={{ color: "white" }}>
+													{item.name}
+												</h1>
+												<p className = "heading" style={{ fontSize:"30px",marginLeft: "10px" }}>{item.species}</p>
+											</Grid>
+											<Grid item xs={4}>
+												<img
+													
+													style={{ height: "220px", marginTop: "10px" }}
+												/>
+											</Grid>
 										</Grid>
-										<Grid item xs={4}>
-											<img
-												src={image_arr[item.name.length % 5]}
-												style={{ height: "120px", marginTop: "10px" }}
-											/>
+									</div>
+									<Grid container spacing = {2}>
+										<Grid item xs = {6}>
+										<h1 className = "heading" style={{ color:"#b52cc7",fontSize:"30px",margin: "20px" }}>LIKES</h1>	
+										{item.foods.likes.map(like => <h1 style={{color:"white",margin: "20px" }}>{like}</h1>)}
+										
+										</Grid>
+										<Grid item xs = {6}>
+										<h1 className = "heading" style={{color:"#b52cc7" ,fontSize:"30px",margin: "20px" }}>DISLIKES</h1>
+										{item.foods.dislikes.map(like => <h1 style={{color:"white",margin: "20px" }}>{like}</h1>)}
+										
 										</Grid>
 									</Grid>
-								</div>
-								<h1 style={{ marginLeft: "10px" }}>{item.species}</h1>
-								{item.foods.likes.map(like => <h1>{like}</h1>)}
-								
-								
-								<Button
-									style={{ marginLeft: "10px" }}
-									variant="outlined"
-									color="primary"
-									onClick = {() => deletePet(key)}
+									<Grid container spacing = {2}>
+										<Grid item xs = {6}>
+										<Button
+										style={{ marginLeft: "20px" }}
+										variant="outlined"
+										color="primary"
+										onClick = {() => handleEdit(key, item.name, item.species)}
+										
+										
+									>
+										EDIT
+									</Button>
+
+										</Grid>
+										<Grid item xs = {6}>
+										<Button
+										style={{ marginLeft: "20px" }}
+										variant="outlined"
+										color="primary"
+										onClick = {() => deletePet(key)}
+										
+									>
+										DELETE
+									</Button>
+										</Grid>
+									</Grid>
 									
-								>
-									DELETE
-								</Button>
-								<Button
-									style={{ marginLeft: "10px" }}
-									variant="outlined"
-									color="primary"
-									onClick = {() => handleEdit(key, item.name, item.species)}
 									
 									
-								>
-									EDIT
-								</Button>
-							</Paper>
-						</Grid>
+									
+									
+			  </div>
+			
+			 
+			</Fade>
+						</Paper>
+						
+					</Grid>
+	
 					);
 				})}
 			</Grid>
-			<br />
+
+		
 
 			<Dialog
 				open={open}
@@ -273,8 +387,15 @@ export default function PetSearch() {
 			</Dialog>
 			</div>
 			: 
-			
-			<h1>PAGE LOADING</h1>} 
+		<Grid container spacing  = {2}>
+			<Grid item xs = {3}>
+
+			</Grid>
+			<Grid item xs = {9}>
+				<CircularProgress color = "primary" />
+			</Grid>
+		</Grid>	
+		} 
 			
 		</div>
 	);

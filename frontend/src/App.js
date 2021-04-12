@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
+    background:"#efd7fa"
   },
   drawerPaper: {
     width: drawerWidth,
@@ -50,16 +51,17 @@ export default function App() {
     <div className={classes.root}>
 
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar style = {{background:"#b52cc7"}} position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h6" noWrap>
-            Clipped drawer
-          </Typography>
+          <h4 style = {{fontSize:"28px"}}className = "heading">
+            PetSearch.com
+          </h4>
         </Toolbar>
       </AppBar>
       <Drawer
         className={classes.drawer}
         variant="permanent"
+        
         classes={{
           paper: classes.drawerPaper,
         }}
@@ -67,7 +69,7 @@ export default function App() {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            {['HOME', 'SEARCH', 'DASHBOARD', 'IMPORTANT'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
@@ -76,7 +78,7 @@ export default function App() {
           </List>
           <Divider />
           <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+            {['MAILS', 'MESSAGES', 'FORUM'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                 <ListItemText primary={text} />
@@ -85,7 +87,7 @@ export default function App() {
           </List>
         </div>
       </Drawer>
-      <main className={classes.content}>
+      <main style = {{background:"whitesmoke"}} className={classes.content}>
         <Toolbar />
        <PetState>
          <PetSearch />
